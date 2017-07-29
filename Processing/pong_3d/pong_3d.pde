@@ -2,7 +2,8 @@ import processing.serial.*;
 
 // Arena is 500 x 500 x 500
 // Center of the arena is (0, 0, 0)
-final float speed_z = 0.001;
+final float speed_z = 0.01;
+//final float speed_z = 0.001;
 
 final float player1_r = 50;
 final float player2_r = 50;
@@ -49,7 +50,7 @@ final boolean standalone = false;
 
 void setup()
 {
-  size(1000, 1000, P3D);  
+  fullScreen(P3D);
   textSize(text_size);
   if (!standalone)
   {
