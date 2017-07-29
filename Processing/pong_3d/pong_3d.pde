@@ -28,9 +28,20 @@ float hoek_z = 0.0;
 int score1 = 0;
 int score2 = 0;
 
-Ball player_1 = new Ball(player1_x, player1_y, player1_r);
-Ball player_2 = new Ball(player2_x, player2_y, player2_r);
-Ball bal = new Ball(bal_x, bal_y, bal_r);
+Ball player_1 = new Ball(
+  new PVector(player1_x, player1_y), 
+  new PVector(0.0, 0.0), 
+  player1_r);
+
+Ball player_2 = new Ball(
+  new PVector(player2_x, player2_y), 
+  new PVector(0.0, 0.0), 
+  player2_r);
+
+Ball bal = new Ball(
+  new PVector(bal_x, bal_y), 
+  new PVector(bal_dx, bal_dy), 
+  bal_r);
 
 Serial serial_port;
 
@@ -75,15 +86,19 @@ void draw()
   player_2.move();
   bal.move();
 
+  //Ball player_1_copy = new Ball(new PVector(player_1.m_position.x, player_1.m_position.y), new PVector(player_1.m_velocity.x, player_1.m_velocity.y), player_1.m_radius);
+  //Ball player_2_copy = new Ball(new PVector(player_2.m_position.x, player_2.m_position.y), new PVector(player_2.m_velocity.x, player_2.m_velocity.y), player_2.m_radius);
+  //bal.check_collision(player_1_copy);
+  //bal.check_collision(player_2_copy);
   bal.check_collision(player_1);
   bal.check_collision(player_2);
 
   player_1.display();
   player_2.display();
   bal.display();
- 
+
   draw_surrounding();
-  
+
   text(score1, 0, -10);
   text(score2, 0, +10);
 
@@ -129,7 +144,7 @@ void draw_surrounding()
 
 float get_distance(float dx, float dy)
 {
-  return sqrt((dx * dx) + (dy * dy)); 
+  return sqrt((dx * dx) + (dy * dy));
 }
 
 void keyPressed() {
@@ -138,24 +153,21 @@ void keyPressed() {
   {
     if (keyCode == UP) 
     {
-      --player2_dy;
+      player_2.change_dy(-1);
     } 
     if (keyCode == DOWN) 
     {
-      ++player2_dy;
-    } 
+      player_2.change_dy(1);
+    }
   }
   if (key == 'w') 
   {
     player_1.change_dy(-1);
-    //--player1_dy;
   }
   if (key == 's') 
   {
     player_1.change_dy( 1);
-    //++player1_dy;
   }
-  
 }
 
 
@@ -166,22 +178,29 @@ class Ball
   PVector m_velocity;
   float m_radius;
 
-  Ball(float x, float y, float radius) 
+  Ball(PVector position, PVector velocity, float radius) 
   {
-    m_position = new PVector(x, y);
-    m_velocity = PVector.random2D();
-    m_velocity.mult(5);
+    m_position = position;
+    m_velocity = velocity;
     m_radius = radius;
   }
 
-  final float get_radius() { return m_radius; }
+  final float get_radius() { 
+    return m_radius;
+  }
+
+  void set_velocity_to_zero()
+  {
+    m_velocity.x = 0.0; 
+    m_velocity.y = 0.0;
+  }
   void set_y(float y) 
   {
     m_position.y = y;
   }
   void change_dy(float change)
   {
-    m_velocity.y += change;  
+    m_velocity.y += change;
   }
   void move() 
   {
@@ -190,119 +209,126 @@ class Ball
     if (m_position.x > maxx - m_radius) 
     {
       m_velocity.x = -abs(m_velocity.x);
-    } 
-    else if (m_position.x < minx + m_radius) 
+    } else if (m_position.x < minx + m_radius) 
     {
       m_velocity.x = abs(m_velocity.x);
-    } 
-    else if (m_position.y > maxy - m_radius) 
+    } else if (m_position.y > maxy - m_radius) 
     {
       m_velocity.y = -abs(m_velocity.y);
-    } 
-    else if (m_position.y < miny + m_radius) 
+    } else if (m_position.y < miny + m_radius) 
     {
       m_velocity.y = abs(m_velocity.y);
     }
   }
 
-  void check_collision(Ball other) {
+  void check_collision(final Ball other) 
+  {
 
     // Get distances between the balls components
-    PVector distanceVect = PVector.sub(other.m_position, m_position);
+    final PVector distanceVect = PVector.sub(other.m_position, m_position);
 
     // Calculate magnitude of the vector separating the balls
-    float distanceVectMag = distanceVect.mag();
+    final float distanceVectMag = distanceVect.mag();
 
     // Minimum distance before they are touching
-    float minDistance = m_radius + other.get_radius();
+    final float minDistance = m_radius + other.get_radius();
 
-    if (distanceVectMag < minDistance) {
-      float distanceCorrection = (minDistance-distanceVectMag)/2.0;
-      PVector d = distanceVect.copy();
-      PVector correctionVector = d.normalize().mult(distanceCorrection);
-      other.m_position.add(correctionVector);
-      m_position.sub(correctionVector);
+    //No collission
+    if (distanceVectMag > minDistance) return;
 
-      // get angle of distanceVect
-      float theta  = distanceVect.heading();
-      // precalculate trig values
-      float sine = sin(theta);
-      float cosine = cos(theta);
+    final float distanceCorrection = (minDistance-distanceVectMag)/2.0;
+    PVector d = distanceVect.copy();
+    PVector correctionVector = d.normalize().mult(distanceCorrection);
+    other.m_position.add(correctionVector);
+    m_position.sub(correctionVector);
 
-      /* bTemp will hold rotated ball positions. You 
-       just need to worry about bTemp[1] position*/
-      PVector[] bTemp = {
-        new PVector(), new PVector()
-      };
+    // get angle of distanceVect
+    float theta  = distanceVect.heading();
+    // precalculate trig values
+    float sine = sin(theta);
+    float cosine = cos(theta);
 
-      /* this ball's position is relative to the other
-       so you can use the vector between them (bVect) as the 
-       reference point in the rotation expressions.
-       bTemp[0].position.x and bTemp[0].position.y will initialize
-       automatically to 0.0, which is what you want
-       since b[1] will rotate around b[0] */
-      bTemp[1].x  = cosine * distanceVect.x + sine * distanceVect.y;
-      bTemp[1].y  = cosine * distanceVect.y - sine * distanceVect.x;
+    /* bTemp will hold rotated ball positions. You 
+     just need to worry about bTemp[1] position*/
+    PVector[] bTemp = {
+      new PVector(), new PVector()
+    };
 
-      // rotate Temporary velocities
-      PVector[] vTemp = {
-        new PVector(), new PVector()
-      };
+    /* this ball's position is relative to the other
+     so you can use the vector between them (bVect) as the 
+     reference point in the rotation expressions.
+     bTemp[0].position.x and bTemp[0].position.y will initialize
+     automatically to 0.0, which is what you want
+     since b[1] will rotate around b[0] */
+    bTemp[1].x  = cosine * distanceVect.x + sine * distanceVect.y;
+    bTemp[1].y  = cosine * distanceVect.y - sine * distanceVect.x;
 
-      vTemp[0].x  = cosine * m_velocity.x + sine * m_velocity.y;
-      vTemp[0].y  = cosine * m_velocity.y - sine * m_velocity.x;
-      vTemp[1].x  = cosine * other.m_velocity.x + sine * other.m_velocity.y;
-      vTemp[1].y  = cosine * other.m_velocity.y - sine * other.m_velocity.x;
+    // rotate Temporary velocities
+    PVector[] vTemp = {
+      new PVector(), new PVector()
+    };
 
-      /* Now that velocities are rotated, you can use 1D
-       conservation of momentum equations to calculate 
-       the final velocity along the x-axis. */
-      PVector[] vFinal = {  
-        new PVector(), new PVector()
-      };
+    vTemp[0].x  = cosine * m_velocity.x + sine * m_velocity.y;
+    vTemp[0].y  = cosine * m_velocity.y - sine * m_velocity.x;
+    
+    //Instead of using the player's velocity, use the opposite velocity of the ball 
+    //vTemp[1].x  = cosine * other.m_velocity.x + sine * other.m_velocity.y;
+    //vTemp[1].y  = cosine * other.m_velocity.y - sine * other.m_velocity.x;
+    vTemp[1].x  = cosine * -m_velocity.x + sine * -m_velocity.y;
+    vTemp[1].y  = cosine * -m_velocity.y - sine * -m_velocity.x;
 
-      // RJCB: No idea what these m's are for
-      final float m = m_radius * 0.1;
-      final float other_m = other.get_radius() * 0.1;
+    /* Now that velocities are rotated, you can use 1D
+     conservation of momentum equations to calculate 
+     the final velocity along the x-axis. */
+    PVector[] vFinal = {  
+      new PVector(), new PVector()
+    };
 
-      // final rotated velocity for b[0]
-      
-      vFinal[0].x = ((m - other_m) * vTemp[0].x + 2 * other_m * vTemp[1].x) / (m + other_m);
-      vFinal[0].y = vTemp[0].y;
+    // RJCB: No idea what these m's are for
+    final float m = m_radius * 0.1;
+    final float other_m = other.get_radius() * 0.1;
 
-      // final rotated velocity for b[0]
-      vFinal[1].x = ((other_m - m) * vTemp[1].x + 2 * m * vTemp[0].x) / (m + other_m);
-      vFinal[1].y = vTemp[1].y;
+    // final rotated velocity for b[0]
 
-      // hack to avoid clumping
-      bTemp[0].x += vFinal[0].x;
-      bTemp[1].x += vFinal[1].x;
+    vFinal[0].x = ((m - other_m) * vTemp[0].x + 2 * other_m * vTemp[1].x) / (m + other_m);
+    vFinal[0].y = vTemp[0].y;
 
-      /* Rotate ball positions and velocities back
-       Reverse signs in trig expressions to rotate 
-       in the opposite direction */
-      // rotate balls
-      PVector[] bFinal = { 
-        new PVector(), new PVector()
-      };
+    // final rotated velocity for b[0]
+    vFinal[1].x = ((other_m - m) * vTemp[1].x + 2 * m * vTemp[0].x) / (m + other_m);
+    vFinal[1].y = vTemp[1].y;
 
-      bFinal[0].x = cosine * bTemp[0].x - sine * bTemp[0].y;
-      bFinal[0].y = cosine * bTemp[0].y + sine * bTemp[0].x;
-      bFinal[1].x = cosine * bTemp[1].x - sine * bTemp[1].y;
-      bFinal[1].y = cosine * bTemp[1].y + sine * bTemp[1].x;
+    // hack to avoid clumping
+    bTemp[0].x += vFinal[0].x;
+    bTemp[1].x += vFinal[1].x;
 
-      // update balls to screen position
-      other.m_position.x = m_position.x + bFinal[1].x;
-      other.m_position.y = m_position.y + bFinal[1].y;
+    /* Rotate ball positions and velocities back
+     Reverse signs in trig expressions to rotate 
+     in the opposite direction */
+    // rotate balls
+    PVector[] bFinal = { 
+      new PVector(), new PVector()
+    };
 
-      m_position.add(bFinal[0]);
+    bFinal[0].x = cosine * bTemp[0].x - sine * bTemp[0].y;
+    bFinal[0].y = cosine * bTemp[0].y + sine * bTemp[0].x;
+    bFinal[1].x = cosine * bTemp[1].x - sine * bTemp[1].y;
+    bFinal[1].y = cosine * bTemp[1].y + sine * bTemp[1].x;
 
-      // update velocities
-      m_velocity.x = cosine * vFinal[0].x - sine * vFinal[0].y;
-      m_velocity.y = cosine * vFinal[0].y + sine * vFinal[0].x;
-      other.m_velocity.x = cosine * vFinal[1].x - sine * vFinal[1].y;
-      other.m_velocity.y = cosine * vFinal[1].y + sine * vFinal[1].x;
-    }
+    //Nope, other players do not move
+    // update balls to screen position
+    //other.m_position.x = m_position.x + bFinal[1].x;
+    //other.m_position.y = m_position.y + bFinal[1].y;
+
+    m_position.add(bFinal[0]);
+
+    // update velocities
+    m_velocity.x = cosine * vFinal[0].x - sine * vFinal[0].y;
+    m_velocity.y = cosine * vFinal[0].y + sine * vFinal[0].x;
+    
+    //Nope, other players do not move
+    //other.m_velocity.x = cosine * vFinal[1].x - sine * vFinal[1].y;
+    //other.m_velocity.y = cosine * vFinal[1].y + sine * vFinal[1].x;
+
   }
 
   void display() 
