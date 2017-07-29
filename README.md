@@ -9,6 +9,14 @@ Pong in 3D, written in Arduino and Processing
  * Machine schematics: Richel Bilderbeek
  * Putting machine schematics into Fritzing: Carmen IJsebaart
 
+## Game
+
+![Screenshot 2017-07-29 1](Screenshots/20170729_1.png)
+
+![Screenshot 2017-07-29 2](Screenshots/20170729_2.png)
+
+![Screenshot 2017-07-29 3](Screenshots/20170729_3.png)
+
 ## Machine
 
 ![Machine 5](Screenshots/Machine5.jpg)
@@ -18,15 +26,6 @@ Pong in 3D, written in Arduino and Processing
 ![Machine 7](Screenshots/Machine7.jpg)
 
 ![Machine 8](Screenshots/Machine8.jpg)
-
-
-## Game
-
-![Screenshot 2017-07-29 1](Screenshots/20170729_1.png)
-
-![Screenshot 2017-07-29 2](Screenshots/20170729_2.png)
-
-![Screenshot 2017-07-29 3](Screenshots/20170729_3.png)
 
 ## Fritzing schematics
 
