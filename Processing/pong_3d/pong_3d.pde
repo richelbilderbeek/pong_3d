@@ -2,6 +2,7 @@ import processing.serial.*;
 
 // Arena is 500 x 500 x 500
 // Center of the arena is (0, 0, 0)
+final float speed_z = 0.001;
 
 final float player1_r = 50;
 final float player2_r = 50;
@@ -13,14 +14,15 @@ final float maxy =  250.0;
 
 final float bal_x = 0.0;
 final float bal_y = 0.0;
-float bal_dx = 5.0;
-float bal_dy = 0.1;
+final float bal_dx = 5.0;
+final float bal_dy = 0.1;
 final float player1_x = minx + (1.0 * player1_r);
 final float player1_y = 0.0;
 final float player1_dy = 0.0;
 final float player2_x = maxx - (1.0 * player2_r);
 final float player2_y = 0.0;
-float player2_dy = 0.0;
+final float player2_dy = 0.0;
+final float text_size = 128;
 float hoek_z = 0.0;
 int score1 = 0;
 int score2 = 0;
@@ -43,11 +45,12 @@ Ball bal = new Ball(
 Serial serial_port;
 
 /// standalone means without Arduino
-final boolean standalone = true;
+final boolean standalone = false;
 
 void setup()
 {
   size(1000, 1000, P3D);  
+  textSize(text_size);
   if (!standalone)
   {
     serial_port = new Serial(this, Serial.list()[0], 9600);
@@ -92,10 +95,13 @@ void draw()
 
   draw_surrounding();
 
-  text(score1, 0, -10);
-  text(score2, 0, +10);
+  fill(255, 128, 128);
+  text(score1, -text_size, text_size / 2);
 
-  hoek_z += 0.001;
+  fill(128, 128, 255);
+  text(score2,  text_size, text_size / 2);
+
+  hoek_z += speed_z;
 }
 
 void draw_surrounding()
@@ -202,13 +208,18 @@ class Ball
     if (m_position.x > maxx - m_radius) 
     {
       m_velocity.x = -abs(m_velocity.x);
-    } else if (m_position.x < minx + m_radius) 
+      ++score1;
+    } 
+    else if (m_position.x < minx + m_radius) 
     {
       m_velocity.x = abs(m_velocity.x);
-    } else if (m_position.y > maxy - m_radius) 
+      ++score2;
+    } 
+    else if (m_position.y > maxy - m_radius) 
     {
       m_velocity.y = -abs(m_velocity.y);
-    } else if (m_position.y < miny + m_radius) 
+    } 
+    else if (m_position.y < miny + m_radius) 
     {
       m_velocity.y = abs(m_velocity.y);
     }
