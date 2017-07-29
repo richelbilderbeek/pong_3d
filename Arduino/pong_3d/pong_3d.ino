@@ -8,9 +8,8 @@ void setup()
 void loop() 
 {
   Serial.write(0);
-  Serial.write(analogRead(A0) / 4);
-  Serial.write(analogRead(A1) / 4);
-  Serial.write(255);
+  Serial.write(map(analogRead(A0), 0, 1023, 1, 255));
+  Serial.write(map(analogRead(A1), 0, 1023, 1, 255));
   delay(10);
 }
 

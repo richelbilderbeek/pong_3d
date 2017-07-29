@@ -1,3 +1,5 @@
+import processing.serial.*;
+
 // Arena is 500 x 500 x 500
 // Center of the arena is (0, 0, 0)
 
@@ -24,13 +26,36 @@ float hoek_z = 0.0;
 int score1 = 0;
 int score2 = 0;
 
+
+Serial serial_port;
+
+/// standalone means without Arduino
+final boolean standalone = true;
+
 void setup()
 {
   size(1000, 1000, P3D);  
+  //println(Serial.list());
+  if (!standalone)
+  {
+    serial_port = new Serial(this, Serial.list()[0], 9600);
+  }
 }
 
 void draw()
 {
+  if (!standalone)
+  {
+    while (serial_port.available() > 0) 
+    {
+      final int spacer_value = serial_port.read();
+      if (spacer_value != 0) continue; 
+      if (serial_port.available() == 0) break;
+      player1_y = map(serial_port.read(), 1, 255, miny, maxy);
+      if (serial_port.available() == 0) break;
+      player2_y = map(serial_port.read(), 1, 255, miny, maxy);
+    }
+  }
   background(0);
   noStroke();
   directionalLight(255, 0, 0, -cos(hoek_z * 5.0), -sin(hoek_z * 5.0), 0);
