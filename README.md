@@ -11,13 +11,13 @@ Pong in 3D, written in Arduino and Processing
 
 ## Machine
 
-![Machine 5](Screenshots/Machine_5.jpg)
+![Machine 5](Screenshots/Machine5.jpg)
 
-![Machine 6](Screenshots/Machine_6.jpg)
+![Machine 6](Screenshots/Machine6.jpg)
 
-![Machine 7](Screenshots/Machine_7.jpg)
+![Machine 7](Screenshots/Machine7.jpg)
 
-![Machine 8](Screenshots/Machine_8.jpg)
+![Machine 8](Screenshots/Machine8.jpg)
 
 
 ## Game
@@ -51,13 +51,13 @@ From [openmusicarchive.org](http://openmusicarchive.org/audio/Eddies_Twister.mp3
 
 ## Machine before adding paint
 
-![Machine 1](Screenshots/Machine_1.jpg)
+![Machine 1](Screenshots/Machine1.jpg)
 
-![Machine 2](Screenshots/Machine_2.jpg)
+![Machine 2](Screenshots/Machine2.jpg)
 
-![Machine 3](Screenshots/Machine_3.jpg)
+![Machine 3](Screenshots/Machine3.jpg)
 
-![Machine 4](Screenshots/Machine_4.jpg)
+![Machine 4](Screenshots/Machine4.jpg)
 
 ## Older screenshots
 
