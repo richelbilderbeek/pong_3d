@@ -237,16 +237,18 @@ class Ball
     if (distanceVectMag > minDistance) return;
 
     final float distanceCorrection = (minDistance-distanceVectMag)/2.0;
-    PVector d = distanceVect.copy();
-    PVector correctionVector = d.normalize().mult(distanceCorrection);
-    other.m_position.add(correctionVector);
+    final PVector d = distanceVect.copy();
+    final PVector correctionVector = d.normalize().mult(distanceCorrection);
+    
+    //RJCB: I don't think I need this
+    //other.m_position.add(correctionVector);
     m_position.sub(correctionVector);
 
     // get angle of distanceVect
-    float theta  = distanceVect.heading();
+    final float theta  = distanceVect.heading();
     // precalculate trig values
-    float sine = sin(theta);
-    float cosine = cos(theta);
+    final float sine = sin(theta);
+    final float cosine = cos(theta);
 
     /* bTemp will hold rotated ball positions. You 
      just need to worry about bTemp[1] position*/
