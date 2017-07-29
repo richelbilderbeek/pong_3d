@@ -1,5 +1,12 @@
 import processing.serial.*;
 
+import ddf.minim.*;
+AudioPlayer player;
+Minim minim;//audio context
+
+//import processing.sound.*;
+//SoundFile file;
+
 // Arena is 500 x 500 x 500
 // Center of the arena is (0, 0, 0)
 final float speed_z = 0.01;
@@ -45,6 +52,8 @@ Ball bal = new Ball(
 
 Serial serial_port;
 
+
+
 /// standalone means without Arduino
 final boolean standalone = false;
 
@@ -56,6 +65,10 @@ void setup()
   {
     serial_port = new Serial(this, Serial.list()[0], 9600);
   }
+
+  minim = new Minim(this);
+  player = minim.loadFile("EddiesTwister.mp3");
+  player.play();
 }
 
 void draw()
