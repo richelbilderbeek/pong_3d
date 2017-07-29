@@ -11,13 +11,10 @@ final float maxx =  500.0;
 final float miny = -250.0;
 final float maxy =  250.0;
 
-// Use Ball from https://processing.org/examples/circlecollision.html
-
-
 final float bal_x = 0.0;
 final float bal_y = 0.0;
 float bal_dx = 5.0;
-float bal_dy = 3.0;
+float bal_dy = 0.1;
 final float player1_x = minx + (1.0 * player1_r);
 final float player1_y = 0.0;
 final float player1_dy = 0.0;
@@ -86,10 +83,6 @@ void draw()
   player_2.move();
   bal.move();
 
-  //Ball player_1_copy = new Ball(new PVector(player_1.m_position.x, player_1.m_position.y), new PVector(player_1.m_velocity.x, player_1.m_velocity.y), player_1.m_radius);
-  //Ball player_2_copy = new Ball(new PVector(player_2.m_position.x, player_2.m_position.y), new PVector(player_2.m_velocity.x, player_2.m_velocity.y), player_2.m_radius);
-  //bal.check_collision(player_1_copy);
-  //bal.check_collision(player_2_copy);
   bal.check_collision(player_1);
   bal.check_collision(player_2);
 
@@ -171,7 +164,7 @@ void keyPressed() {
 }
 
 
-
+// Use Ball from https://processing.org/examples/circlecollision.html
 class Ball 
 {
   PVector m_position;
@@ -287,16 +280,18 @@ class Ball
     };
 
     // RJCB: No idea what these m's are for
-    final float m = m_radius * 0.1;
-    final float other_m = other.get_radius() * 0.1;
+    //final float m = m_radius;
+    //final float other_m = other.get_radius();
+    //final float m = m_radius * 0.1;
+    //final float other_m = other.get_radius() * 0.1;
 
     // final rotated velocity for b[0]
 
-    vFinal[0].x = ((m - other_m) * vTemp[0].x + 2 * other_m * vTemp[1].x) / (m + other_m);
+    vFinal[0].x = ((m_radius - other.get_radius()) * vTemp[0].x + 2 * other.get_radius() * vTemp[1].x) / (m_radius + other.get_radius());
     vFinal[0].y = vTemp[0].y;
 
     // final rotated velocity for b[0]
-    vFinal[1].x = ((other_m - m) * vTemp[1].x + 2 * m * vTemp[0].x) / (m + other_m);
+    vFinal[1].x = ((other.get_radius() - m_radius) * vTemp[1].x + 2 * m_radius * vTemp[0].x) / (m_radius + other.get_radius());
     vFinal[1].y = vTemp[1].y;
 
     // hack to avoid clumping

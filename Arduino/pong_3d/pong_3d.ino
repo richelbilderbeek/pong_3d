@@ -10,6 +10,6 @@ void loop()
   Serial.write(0);
   Serial.write(map(analogRead(A0), 0, 1023, 1, 255));
   Serial.write(map(analogRead(A1), 0, 1023, 1, 255));
-  delay(10);
+  delay(20);
 }
 
