@@ -55,7 +55,7 @@ Serial serial_port;
 
 
 /// standalone means without Arduino
-final boolean standalone = false;
+final boolean standalone = true;
 
 void setup()
 {
