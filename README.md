@@ -1,5 +1,9 @@
 # pong_3d
 
+Branch|[![Travis CI logo](pics/TravisCI.png)](https://travis-ci.org)
+---|---
+`master`|[![Build Status](https://travis-ci.org/richelbilderbeek/pong_3d.svg?branch=master)](https://travis-ci.org/richelbilderbeek/pong_3d)
+
 Pong in 3D, written in Arduino and Processing
 
  * Arduino coding: Richel Bilderbeek
