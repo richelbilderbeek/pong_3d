@@ -15,29 +15,29 @@ Pong in 3D, written in Arduino and Processing
 
 ## Game
 
-![Screenshot 2017-07-29 1](Screenshots/20170729_1.png)
+![Screenshot 2017-07-29 1](screenshots/20170729_1.png)
 
-![Screenshot 2017-07-29 2](Screenshots/20170729_2.png)
+![Screenshot 2017-07-29 2](screenshots/20170729_2.png)
 
-![Screenshot 2017-07-29 3](Screenshots/20170729_3.png)
+![Screenshot 2017-07-29 3](screenshots/20170729_3.png)
 
 ## Machine
 
-![Machine 5](Screenshots/Machine5.jpg)
+![Machine 5](screenshots/Machine5.jpg)
 
-![Machine 6](Screenshots/Machine6.jpg)
+![Machine 6](screenshots/Machine6.jpg)
 
-![Machine 7](Screenshots/Machine7.jpg)
+![Machine 7](screenshots/Machine7.jpg)
 
-![Machine 8](Screenshots/Machine8.jpg)
+![Machine 8](screenshots/Machine8.jpg)
 
 ## Fritzing schematics
 
-![Breadboard view](Screenshots/Breadboard.png)
+![Breadboard view](screenshots/Breadboard.png)
 
-![Schematic view](Screenshots/Schematic.png)
+![Schematic view](screenshots/Schematic.png)
 
-![PCB view](Screenshots/PCB.png)
+![PCB view](screenshots/PCB.png)
 
 ## Music
 
@@ -54,18 +54,18 @@ From [openmusicarchive.org](http://openmusicarchive.org/audio/Eddies_Twister.mp3
 
 ## Machine before adding paint
 
-![Machine 1](Screenshots/Machine1.jpg)
+![Machine 1](screenshots/Machine1.jpg)
 
-![Machine 2](Screenshots/Machine2.jpg)
+![Machine 2](screenshots/Machine2.jpg)
 
-![Machine 3](Screenshots/Machine3.jpg)
+![Machine 3](screenshots/Machine3.jpg)
 
-![Machine 4](Screenshots/Machine4.jpg)
+![Machine 4](screenshots/Machine4.jpg)
 
 ## Older screenshots
 
-![Screenshot 2017-07-20 1](Screenshots/20170720_1.png)
+![Screenshot 2017-07-20 1](screenshots/20170720_1.png)
 
-![Screenshot 2017-07-20 2](Screenshots/20170720_2.png)
+![Screenshot 2017-07-20 2](screenshots/20170720_2.png)
 
-![Screenshot 2017-07-20 3](Screenshots/20170720_3.png)
+![Screenshot 2017-07-20 3](screenshots/20170720_3.png)
