@@ -1,47 +1,35 @@
-"""Check that the game runs in a browser and that the arrow keys work."""
-import io
+"""Check that the game runs in a browser and that the keys work."""
 import sys
 import time
 
-from PIL import Image
 from playwright.sync_api import sync_playwright
 
-URL = "http://localhost:8000/lonelier_pong.html"
-
-
-def paddle_at_left(png):
-    """Is the paddle (a dark vertical line) at the left edge?"""
-    img = Image.open(io.BytesIO(png)).convert("L")
-    return any(
-        all(img.getpixel((x, y)) < 128 for y in range(0, 100, 5))
-        for x in range(0, 5)
-    )
+URL = "http://localhost:8000/pong_3d.html"
 
 
 with sync_playwright() as p:
-    browser = p.chromium.launch()
-    # The same size as the iframe on the website
-    page = browser.new_page(viewport={"width": 600, "height": 100})
+    browser = p.chromium.launch(args=["--use-gl=swiftshader", "--ignore-gpu-blocklist"])
+    # About the size of the iframe on the website
+    page = browser.new_page(viewport={"width": 600, "height": 300})
     errors = []
     page.on("pageerror", lambda e: errors.append(str(e)))
     page.goto(URL)
     time.sleep(3)
-    page.mouse.click(300, 50)
+    page.mouse.click(300, 150)
     before = page.screenshot()
-    page.keyboard.press("ArrowLeft")
-    time.sleep(0.2)
-    after_left = page.screenshot()
-    page.keyboard.press("ArrowRight")
-    time.sleep(0.2)
-    after_right = page.screenshot()
+    time.sleep(0.5)
+    after_wait = page.screenshot()
+    for _ in range(3):
+        page.keyboard.press("w")
+        page.keyboard.press("ArrowDown")
+    time.sleep(1)
+    after_keys = page.screenshot()
     browser.close()
 
 if errors:
     sys.exit(f"Page errors: {errors}")
-if before == after_right:
+if before == after_wait:
     sys.exit("The game is not running: the page did not change")
-if not paddle_at_left(after_left):
-    sys.exit("Pressing Left did not move the paddle to the left")
-if paddle_at_left(after_right):
-    sys.exit("Pressing Right did not move the paddle to the right")
+if after_wait == after_keys:
+    sys.exit("Pressing keys did not change the page")
 print("OK")

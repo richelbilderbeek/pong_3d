@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Pong 3D</title>
+  <style>
+    html, body { margin: 0; padding: 0; background: #000; overflow: hidden; }
+    canvas { display: block; outline: none; }
+  </style>
+  <!-- Processing.js 1.6.5, MIT license, https://github.com/processing-js/processing-js -->
+  <script src="processing.min.js"></script>
+</head>
+<body>
+  <canvas id="game" tabindex="0"></canvas>
+  <script>
+    // Run the desktop sketch pong_3d.pde in the browser.
+    // The sketch uses things a browser does not have (an Arduino
+    // over a serial port, the Minim sound library, fullScreen),
+    // so these are patched out here, keeping the .pde unchanged.
+    function to_web(src) {
+      return src
+        .replace(/^\s*import\s+[^;]+;/gm, "")
+        .replace(/fullScreen\(\s*P3D\s*\)/, "size(window.innerWidth, window.innerHeight, P3D)")
+        .replace(/^\s*minim\s*=.*$/m, "")
+        .replace(/^\s*player\s*=\s*minim\.loadFile.*$/m, "")
+        .replace(/^\s*player\.play\(\);.*$/m, "")
+        .replace(/\bAudioPlayer\s+player\s*;/, "")
+        .replace(/\bMinim\s+minim\s*;.*$/m, "")
+        .replace(/\bSerial\s+serial_port\s*;/, "var serial_port;")
+        // The arena is 1000 x 500: scale it to fit the window
+        .replace(/translate\(\s*width\s*\/\s*2\s*,\s*height\s*\/\s*2\s*\);/,
+          "$& scale(min(width / 1100.0, height / 600.0));")
+        .replace(/\.copy\(\)/g, ".get()")
+        .replace(/\.heading\(\)/g, ".heading2D()");
+    }
+
+    // In Processing 3, PVector methods like normalize() return the
+    // vector, so that calls can be chained. In Processing.js they
+    // return nothing.
+    var proto = Processing.prototype.PVector.prototype;
+    ["set", "add", "sub", "mult", "div", "normalize", "limit"].forEach(function (name) {
+      var method = proto[name];
+      proto[name] = function () {
+        method.apply(this, arguments);
+        return this;
+      };
+    });
+
+    var canvas = document.getElementById("game");
+    fetch("pong_3d.pde")
+      .then(function (r) {
+        if (!r.ok) throw new Error("Cannot load pong_3d.pde: " + r.status);
+        return r.text();
+      })
+      .then(function (src) {
+        new Processing(canvas, Processing.compile(to_web(src)));
+        canvas.focus();
+      });
+    canvas.addEventListener("click", function () { canvas.focus(); });
+  </script>
+</body>
+</html>
