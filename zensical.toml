@@ -14,8 +14,8 @@ nav = [
 variant = "classic"
 palette.primary = "black"
 
-favicon = "icon.png"
-logo = "icon.png"
+favicon = "ball.png"
+logo = "ball.png"
 
 # https://zensical.org/docs/setup/language/
 language = "en"
