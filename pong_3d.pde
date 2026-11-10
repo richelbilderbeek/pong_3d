@@ -9,8 +9,8 @@ Minim minim;//audio context
 
 // Arena is 500 x 500 x 500
 // Center of the arena is (0, 0, 0)
-final float speed_z = 0.0;
-//final float speed_z = 0.001;
+//final float speed_z = 0.0;
+final float speed_z = 0.001;
 
 final float player1_r = 50;
 final float player2_r = 50;
