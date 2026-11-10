@@ -1,6 +1,8 @@
 # Pong 3D
 
 Pong in 3D, written in Arduino and Processing
+and one of
+[Richèl Bilderbeek's games](https://richelbilderbeek.github.io/games).
 
 * Arduino coding: Richel Bilderbeek
 * Processing coding: Richel Bilderbeek
