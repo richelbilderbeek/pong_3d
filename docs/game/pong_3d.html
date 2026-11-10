@@ -27,12 +27,28 @@
         .replace(/\bAudioPlayer\s+player\s*;/, "")
         .replace(/\bMinim\s+minim\s*;.*$/m, "")
         .replace(/\bSerial\s+serial_port\s*;/, "var serial_port;")
-        // The arena is 1000 x 500: scale it to fit the window
+        // The arena rotates in 3D: move it away from the camera,
+        // so that it is fully visible in any orientation
         .replace(/translate\(\s*width\s*\/\s*2\s*,\s*height\s*\/\s*2\s*\);/,
-          "$& scale(min(width / 1100.0, height / 600.0));")
+          "translate(width / 2, height / 2, web_z());")
         .replace(/\.copy\(\)/g, ".get()")
-        .replace(/\.heading\(\)/g, ".heading2D()");
+        .replace(/\.heading\(\)/g, ".heading2D()")
+        + "\n" + web_z_src;
     }
+
+    // The z coordinate to move the arena to, so that its bounding
+    // sphere fits in the field of view of the default camera
+    var web_z_src = [
+      "float web_z() {",
+      // Half the arena's diagonal, plus a ball radius and a margin
+      "  final float r = sqrt(sq(maxx - minx) + sq(maxy - miny)) / 2.0 + 50.0 + 30.0;",
+      "  final float half_fov_y = PI / 6.0;",
+      "  final float half_fov_x = atan(tan(half_fov_y) * width / height);",
+      "  final float distance = r / sin(min(half_fov_x, half_fov_y));",
+      "  final float camera_z = (height / 2.0) / tan(half_fov_y);",
+      "  return camera_z - distance;",
+      "}"
+    ].join("\n");
 
     // In Processing 3, PVector methods like normalize() return the
     // vector, so that calls can be chained. In Processing.js they

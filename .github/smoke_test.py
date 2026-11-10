@@ -1,7 +1,9 @@
 """Check that the game runs in a browser and that the keys work."""
+import io
 import sys
 import time
 
+from PIL import Image
 from playwright.sync_api import sync_playwright
 
 URL = "http://localhost:8000/pong_3d.html"
@@ -32,4 +34,10 @@ if before == after_wait:
     sys.exit("The game is not running: the page did not change")
 if after_wait == after_keys:
     sys.exit("Pressing keys did not change the page")
+img = Image.open(io.BytesIO(after_keys)).convert("L")
+w, h = img.size
+edge = [img.getpixel((x, y)) for x in range(w) for y in (0, h - 1)]
+edge += [img.getpixel((x, y)) for y in range(h) for x in (0, w - 1)]
+if max(edge) > 0:
+    sys.exit("The arena does not fit in the window")
 print("OK")
